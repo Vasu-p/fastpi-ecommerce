@@ -1,7 +1,8 @@
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr, Field
-from pyobjectID import MongoObjectId, PyObjectId
+from pyobjectID import MongoObjectId
+from schemas.common import DocumentUpdate
 
 
 class User(BaseModel):
@@ -9,7 +10,6 @@ class User(BaseModel):
     name: str
     email: EmailStr
 
-class UpdateUser(BaseModel):
-    id: PyObjectId = Field(alias="_id")
+class UpdateUser(DocumentUpdate):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
