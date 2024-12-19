@@ -9,7 +9,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 @with_db
 async def create(user: User, db: AsyncIOMotorDatabase):
     try:
-        insert_result = await db["users"].insert_one(user.dict(exclude_unset=True))
+        insert_result = await db["users"].insert_one(user.dict(exclude_unset=True, exclude_none=True))
         return str(insert_result.inserted_id)
     except Exception as e:
         print(e)
@@ -28,7 +28,7 @@ async def get_by_id(objectId: str, db: AsyncIOMotorDatabase):
 
 @with_db
 async def update(user: UpdateUser, db: AsyncIOMotorDatabase):
-    return await db["users"].find_one_and_update({ "_id": user.id }, { "$set": remove_id(user.dict(exclude_none=True)) }, return_document=ReturnDocument.AFTER)
+    return await db["users"].find_one_and_update({ "_id": user.id }, { "$set": remove_id(user.dict(exclude_none=True, exclude_unset=True)) }, return_document=ReturnDocument.AFTER)
 
 @with_db
 async def delete(objectId: str, db: AsyncIOMotorDatabase):
