@@ -10,7 +10,7 @@ user_repository = UserRepository()
 async def register_user(user: User):
     created_id = await user_repository.create(user)
     if not created_id:
-        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="User Registration Failed!").dict())
+        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="User registration Failed!").dict())
     return created_id
 
 async def get_all_users():
