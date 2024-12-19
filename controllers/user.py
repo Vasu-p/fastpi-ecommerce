@@ -17,3 +17,7 @@ async def register_user(user: User):
 @router.get("/", response_model=List[User])
 async def get_users():
     return await user_service.get_all_users()
+
+@router.get("/{user_id}", response_model=User)
+async def get_user_by_id(user_id: str):
+    return await user_service.get_user_by_id(user_id)

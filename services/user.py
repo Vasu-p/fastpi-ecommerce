@@ -13,3 +13,9 @@ async def register_user(user: User):
 
 async def get_all_users():
     return await user_repository.get_all()
+
+async def get_user_by_id(id: str):
+    user = await user_repository.get_by_id(id)
+    if not user:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
+    return user

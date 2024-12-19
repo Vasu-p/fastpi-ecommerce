@@ -1,3 +1,5 @@
+from bson import ObjectId
+
 from config.database import with_db
 from schemas.user import User
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -15,3 +17,9 @@ async def create(user: User, db: AsyncIOMotorDatabase):
 async def get_all(db: AsyncIOMotorDatabase):
     users = await db["users"].find().to_list()
     return users
+
+@with_db
+async def get_by_id(objectId: str, db: AsyncIOMotorDatabase):
+    print(f"querying by {objectId}")
+    user = await db["users"].find_one({ "_id": ObjectId(objectId) })
+    return user
