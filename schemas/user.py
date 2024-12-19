@@ -5,6 +5,6 @@ from pyobjectID import MongoObjectId
 
 
 class User(BaseModel):
-    id: Optional[MongoObjectId] = Field(alias="_id")
+    id: Optional[MongoObjectId] = Field(alias="_id", default=None)
     name: str
     email: EmailStr
