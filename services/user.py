@@ -21,8 +21,7 @@ async def get_user_by_id(id: str):
     return user
 
 async def update_user(user: UpdateUser):
-    user = await user_repository.update_user(user)
-    print(f"user is ${user}")
+    user = await user_repository.update(user)
     if not user:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
     return user
