@@ -2,21 +2,18 @@ from typing import List
 
 from fastapi import APIRouter
 
-from repositories.user import create_user, get_all_users
+from schemas.common import APIResponse
 from schemas.user import User
+import services.user as user_service
 
 router = APIRouter()
 
 
-@router.post("/")
+@router.post("/", response_model=APIResponse)
 async def register_user(user: User):
-    id = await create_user(user)
-    if id != None:
-        return { "code": 200 }
-    else:
-        return { "code": 500 }
+    await user_service.register_user(user)
+    return APIResponse(code=200, message="Registration Successful!").dict()
 
 @router.get("/", response_model=List[User])
 async def get_users():
-    users = await get_all_users()
-    return users
+    return await user_service.get_all_users()
