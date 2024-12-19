@@ -29,3 +29,7 @@ async def get_by_id(objectId: str, db: AsyncIOMotorDatabase):
 @with_db
 async def update(user: UpdateUser, db: AsyncIOMotorDatabase):
     return await db["users"].find_one_and_update({ "_id": user.id }, { "$set": remove_id(user.dict(exclude_none=True)) }, return_document=ReturnDocument.AFTER)
+
+@with_db
+async def delete(objectId: str, db: AsyncIOMotorDatabase):
+    return await db["users"].delete_one({ "_id": ObjectId(objectId) })

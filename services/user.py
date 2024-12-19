@@ -25,3 +25,9 @@ async def update_user(user: UpdateUser):
     if not user:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
     return user
+
+async def delete_user(id: str):
+    deleted = await user_repository.delete(id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
+    return True

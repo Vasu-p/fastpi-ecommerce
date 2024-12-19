@@ -12,7 +12,7 @@ router = APIRouter()
 @router.post("/", response_model=APIResponse)
 async def register_user(user: User):
     await user_service.register_user(user)
-    return APIResponse(code=200, message="Registration Successful!").dict()
+    return APIResponse(code=200, message="User registered successful!").dict()
 
 @router.get("/", response_model=List[User])
 async def get_users():
@@ -25,3 +25,8 @@ async def get_user_by_id(user_id: str):
 @router.patch("/", response_model=User)
 async def update_user(user: UpdateUser):
     return await user_service.update_user(user)
+
+@router.delete("/{user_id}", response_model=APIResponse)
+async def delete_user(user_id: str):
+    await user_service.delete_user(user_id)
+    return APIResponse(code=200, message="User deleted successful!").dict()
