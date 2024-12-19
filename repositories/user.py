@@ -1,7 +1,8 @@
 from bson import ObjectId
+from pymongo import ReturnDocument
 
 from config.database import with_db
-from schemas.user import User
+from schemas.user import User, UpdateUser
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 @with_db
@@ -23,3 +24,7 @@ async def get_by_id(objectId: str, db: AsyncIOMotorDatabase):
     print(f"querying by {objectId}")
     user = await db["users"].find_one({ "_id": ObjectId(objectId) })
     return user
+
+@with_db
+async def update_user(user: UpdateUser, db: AsyncIOMotorDatabase):
+    return await db["users"].find_one_and_update({ "_id": user.id }, { "$set": user.dict(exclude_none=True) }, return_document=ReturnDocument.AFTER)
