@@ -1,8 +1,10 @@
 from fastapi import HTTPException
 
-import repositories.user as user_repository
+from repositories.user import UserRepository
 from schemas.common import APIResponse
 from schemas.user import User, UpdateUser
+
+user_repository = UserRepository()
 
 
 async def register_user(user: User):
