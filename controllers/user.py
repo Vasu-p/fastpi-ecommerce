@@ -11,8 +11,8 @@ router = APIRouter()
 
 @router.post("/", response_model=APIResponse)
 async def register_user(user: CreateUser):
-    await user_service.register_user(user)
-    return APIResponse(code=200, message="User registered successful!").dict()
+    user_id = await user_service.register_user(user)
+    return APIResponse(code=200, message="User registered successful!", detail={"_id": user_id}).dict()
 
 @router.get("/", response_model=List[UserOutbound])
 async def get_users():

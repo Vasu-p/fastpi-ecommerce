@@ -12,8 +12,8 @@ router = APIRouter()
 # Endpoint to register a new product
 @router.post("/", response_model=APIResponse)
 async def register_product(product: CreateProduct):
-    await product_service.register_product(product)
-    return APIResponse(code=200, message="Product registered successfully!").dict()
+    product_id = await product_service.register_product(product)
+    return APIResponse(code=200, message="Product registered successfully!", detail={"_id": product_id}).dict()
 
 
 # Endpoint to get all products

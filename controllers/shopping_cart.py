@@ -9,8 +9,8 @@ router = APIRouter()
 @router.post("/", response_model=APIResponse)
 async def create_cart(cart: CreateShoppingCart):
     # Call the service to register the cart
-    await shopping_cart_service.create_shopping_cart(cart)
-    return APIResponse(code=200, message="Shopping cart created successfully!").dict()
+    shopping_cart_id = await shopping_cart_service.create_shopping_cart(cart)
+    return APIResponse(code=200, message="Shopping cart created successfully!", detail={"_id": shopping_cart_id}).dict()
 
 @router.get("/{cart_id}", response_model=ShoppingCartOutbound)
 async def get_cart_by_id(cart_id: str):
