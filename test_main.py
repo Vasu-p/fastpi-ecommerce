@@ -19,6 +19,9 @@ def test_create_user():
     response = requests.post(get_url('/users'), json={ "name": "user", "email": "em@em.com" })
     assert response.status_code == 200
     assert response.json()["code"] == 200
+    assert response.json()["detail"]["_id"] is not None
+    global user_id
+    user_id = response.json()["detail"]["_id"]
 
 def test_user_get_all():
     response = requests.get(get_url('/users'))
@@ -27,8 +30,13 @@ def test_user_get_all():
     assert len(data) == 1
     assert data[0]["name"] == "user"
     assert data[0]["email"] == "em@em.com"
-    global user_id
-    user_id = data[0]["_id"]
+
+def test_get_user_by_id():
+    response = requests.get(get_url(f'/users/{user_id}'))
+    assert response.status_code == 200
+    data = response.json()
+    assert data["name"] == "user"
+    assert data["email"] == "em@em.com"
 
 def test_user_update_200():
     response = requests.patch(get_url('/users'), json={"_id": user_id, "name": "another"})
@@ -53,6 +61,9 @@ def test_create_product():
     })
     assert response.status_code == 200
     assert response.json()["code"] == 200
+    assert response.json()["detail"]["_id"] is not None
+    global product_id
+    product_id = response.json()["detail"]["_id"]
 
 def test_product_get_all():
     response = requests.get(get_url('/products'))
@@ -60,8 +71,12 @@ def test_product_get_all():
     data = response.json()
     assert len(data) == 1
     assert data[0]["name"] == "Laptop"
-    global product_id
-    product_id = data[0]["_id"]
+
+def test_get_product_by_id():
+    response = requests.get(get_url(f'/products/{product_id}'))
+    assert response.status_code == 200
+    data = response.json()
+    assert data["name"] == "Laptop"
 
 def test_product_update_200():
     response = requests.patch(get_url('/products'), json={
