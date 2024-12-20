@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from config.database import with_db
 from repositories.BaseRepository import BaseRepository
-from schemas.shopping_cart import CreateShoppingCart, AddToCart
+from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart
 
 
 class ShoppingCartRepository(BaseRepository):
@@ -18,6 +18,15 @@ class ShoppingCartRepository(BaseRepository):
     async def add_to_cart(self, id: str, request: AddToCart, db: AsyncIOMotorDatabase):
         try:
             await db[self.collection].find_one_and_update({"_id": ObjectId(id)}, { "$push": {"items": request.dict()} })
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @with_db
+    async def remove_from_cart(self, id: str, request: RemoveFromCart, db: AsyncIOMotorDatabase):
+        try:
+            await db[self.collection].find_one_and_update({"_id": ObjectId(id)}, { "$pull": {"items": {'product_id': request.product_id}} })
             return True
         except Exception as e:
             print(e)

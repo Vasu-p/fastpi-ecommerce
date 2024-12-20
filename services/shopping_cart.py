@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from repositories.shopping_cart import ShoppingCartRepository
 from schemas.common import APIResponse
-from schemas.shopping_cart import CreateShoppingCart, AddToCart
+from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart
 from services.user import does_user_exist
 from services.product import does_product_exist
 
@@ -49,4 +49,12 @@ async def add_to_cart(id: str, request: AddToCart):
     added = await shopping_cart_repository.add_to_cart(id, request)
     if not added:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Adding to cart failed!").dict())
+    return True
+
+async def remove_from_cart(id: str, request: RemoveFromCart):
+    await does_cart_exist(id)
+    await does_product_exist_in_cart(id, str(request.product_id))
+    removed = await shopping_cart_repository.remove_from_cart(id, request)
+    if not removed:
+        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Removing from cart failed!").dict())
     return True

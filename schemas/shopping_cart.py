@@ -24,3 +24,6 @@ class CreateShoppingCart(BaseModel):
 class AddToCart(BaseModel):
     product_id: PyObjectId
     quantity: int = 1
+
+class RemoveFromCart(BaseModel):
+    product_id: PyObjectId
