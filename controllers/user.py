@@ -3,14 +3,14 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.common import APIResponse
-from schemas.user import User, UpdateUser, UserOutbound
+from schemas.user import UpdateUser, UserOutbound, CreateUser
 import services.user as user_service
 
 router = APIRouter()
 
 
 @router.post("/", response_model=APIResponse)
-async def register_user(user: User):
+async def register_user(user: CreateUser):
     await user_service.register_user(user)
     return APIResponse(code=200, message="User registered successful!").dict()
 

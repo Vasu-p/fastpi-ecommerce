@@ -2,12 +2,12 @@ from fastapi import HTTPException
 
 from repositories.product import ProductRepository
 from schemas.common import APIResponse
-from schemas.product import Product, UpdateProduct
+from schemas.product import CreateProduct, UpdateProduct
 
 product_repository = ProductRepository()
 
 
-async def register_product(product: Product):
+async def register_product(product: CreateProduct):
     created_id = await product_repository.create(product)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Product registration Failed!").dict())

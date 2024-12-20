@@ -8,6 +8,9 @@ class User(BaseModel):
     name: str
     email: EmailStr
 
+class CreateUser(User):
+    pass
+
 class UserOutbound(User, OutboundModel):
     pass
 

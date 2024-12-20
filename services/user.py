@@ -2,12 +2,12 @@ from fastapi import HTTPException
 
 from repositories.user import UserRepository
 from schemas.common import APIResponse
-from schemas.user import User, UpdateUser
+from schemas.user import CreateUser, UpdateUser
 
 user_repository = UserRepository()
 
 
-async def register_user(user: User):
+async def register_user(user: CreateUser):
     created_id = await user_repository.create(user)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="User registration Failed!").dict())

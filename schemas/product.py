@@ -12,6 +12,9 @@ class Product(BaseModel):
     category: str
     brand: str
 
+class CreateProduct(Product):
+    pass
+
 class ProductOutbound(Product, OutboundModel):
     pass
 

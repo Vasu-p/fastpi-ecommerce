@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.common import APIResponse
-from schemas.product import Product, UpdateProduct, ProductOutbound
+from schemas.product import CreateProduct, UpdateProduct, ProductOutbound
 import services.product as product_service
 
 router = APIRouter()
@@ -11,7 +11,7 @@ router = APIRouter()
 
 # Endpoint to register a new product
 @router.post("/", response_model=APIResponse)
-async def register_product(product: Product):
+async def register_product(product: CreateProduct):
     await product_service.register_product(product)
     return APIResponse(code=200, message="Product registered successfully!").dict()
 
