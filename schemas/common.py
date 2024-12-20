@@ -7,7 +7,7 @@ from pyobjectID import PyObjectId, MongoObjectId
 class APIResponse(BaseModel):
     code: int
     message: str
-    detail: Any
+    detail: Any = None
 
 class OutboundModel(BaseModel):
     id: Optional[MongoObjectId] = Field(alias="_id", default=None)
