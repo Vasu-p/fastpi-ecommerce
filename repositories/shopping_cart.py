@@ -22,3 +22,10 @@ class ShoppingCartRepository(BaseRepository):
         except Exception as e:
             print(e)
             return False
+
+    @with_db
+    async def check_if_product_exists(self, id: str, product_id: str, db: AsyncIOMotorDatabase):
+        exists = await db[self.collection].find_one({"_id": ObjectId(id), "items.product_id": ObjectId(product_id)})
+        if exists:
+            return True
+        return False

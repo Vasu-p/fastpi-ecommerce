@@ -34,9 +34,18 @@ async def does_cart_exist(id: str):
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())
     return True
 
+async def does_product_exist_in_cart(id: str, product_id: str, throw_if_exists = False):
+    exists = await shopping_cart_repository.check_if_product_exists(id=id, product_id=product_id)
+    if throw_if_exists and exists:
+        raise HTTPException(status_code=400, detail=APIResponse(code=400, message="Product already in cart!").dict())
+    if not throw_if_exists and not exists:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Product not in cart!").dict())
+    return True
+
 async def add_to_cart(id: str, request: AddToCart):
     await does_cart_exist(id)
     await does_product_exist(str(request.product_id))
+    await does_product_exist_in_cart(id, str(request.product_id), throw_if_exists=True)
     added = await shopping_cart_repository.add_to_cart(id, request)
     if not added:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Adding to cart failed!").dict())
