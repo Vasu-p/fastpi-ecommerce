@@ -16,8 +16,8 @@ class ProductOutbound(Product, OutboundModel):
     pass
 
 class UpdateProduct(UpdateModel):
-    name: Optional[str]
-    description: Optional[str]
-    price: Optional[float]
-    category: Optional[str]
-    brand: Optional[str]
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    category: Optional[str] = None
+    brand: Optional[str] = None

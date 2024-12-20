@@ -1,8 +1,11 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from config.database import init_connection, close_connection
 from controllers.user import router as UserRouter
 from controllers.product import router as ProductRouter
+
+load_dotenv()
 
 app = FastAPI()
 
