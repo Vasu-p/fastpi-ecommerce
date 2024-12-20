@@ -17,3 +17,7 @@ class UserOutbound(User, OutboundModel):
 class UpdateUser(UpdateModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
+
+class UserRegistrationResponse(BaseModel):
+    user_id: str
+    shopping_cart_id: str
