@@ -1,13 +1,18 @@
 from fastapi import HTTPException
 
 from repositories.shopping_cart import ShoppingCartRepository
+from repositories.user import UserRepository
 from schemas.common import APIResponse
 from schemas.shopping_cart import CreateShoppingCart
 
 shopping_cart_repository = ShoppingCartRepository()
-
+user_repository = UserRepository()
 
 async def create_shopping_cart(shopping_cart: CreateShoppingCart):
+    if shopping_cart.user_id:
+        user = await user_repository.get_by_id(shopping_cart.user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
     created_id = await shopping_cart_repository.create(shopping_cart)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Shopping Cart creation Failed!").dict())
