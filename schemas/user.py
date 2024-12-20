@@ -1,13 +1,16 @@
 from typing import Optional
 
-from pydantic import EmailStr
-from schemas.common import DocumentUpdate, DocumentCreate
+from pydantic import EmailStr, BaseModel
+from schemas.common import UpdateModel, OutboundModel
 
 
-class User(DocumentCreate):
+class User(BaseModel):
     name: str
     email: EmailStr
 
-class UpdateUser(DocumentUpdate):
+class UserOutbound(User, OutboundModel):
+    pass
+
+class UpdateUser(UpdateModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None

@@ -8,8 +8,8 @@ class APIResponse(BaseModel):
     code: int
     message: str
 
-class DocumentCreate(BaseModel):
+class OutboundModel(BaseModel):
     id: Optional[MongoObjectId] = Field(alias="_id", default=None)
 
-class DocumentUpdate(BaseModel):
+class UpdateModel(BaseModel):
     id: PyObjectId = Field(alias="_id")

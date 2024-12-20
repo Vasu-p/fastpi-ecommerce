@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.common import APIResponse
-from schemas.user import User, UpdateUser
+from schemas.user import User, UpdateUser, UserOutbound
 import services.user as user_service
 
 router = APIRouter()
@@ -14,15 +14,15 @@ async def register_user(user: User):
     await user_service.register_user(user)
     return APIResponse(code=200, message="User registered successful!").dict()
 
-@router.get("/", response_model=List[User])
+@router.get("/", response_model=List[UserOutbound])
 async def get_users():
     return await user_service.get_all_users()
 
-@router.get("/{user_id}", response_model=User)
+@router.get("/{user_id}", response_model=UserOutbound)
 async def get_user_by_id(user_id: str):
     return await user_service.get_user_by_id(user_id)
 
-@router.patch("/", response_model=User)
+@router.patch("/", response_model=UserOutbound)
 async def update_user(user: UpdateUser):
     return await user_service.update_user(user)
 

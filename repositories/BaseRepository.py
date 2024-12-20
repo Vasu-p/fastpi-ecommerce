@@ -5,7 +5,7 @@ from pymongo import ReturnDocument
 
 from config.database import with_db
 from repositories.util import remove_id
-from schemas.common import DocumentUpdate
+from schemas.common import UpdateModel
 
 
 class BaseRepository:
@@ -32,7 +32,7 @@ class BaseRepository:
         return user
 
     @with_db
-    async def update(self, document: DocumentUpdate, db: AsyncIOMotorDatabase):
+    async def update(self, document: UpdateModel, db: AsyncIOMotorDatabase):
         return await db[self.collection].find_one_and_update({"_id": document.id}, {
             "$set": remove_id(document.dict(exclude_none=True, exclude_unset=True))}, return_document=ReturnDocument.AFTER)
 

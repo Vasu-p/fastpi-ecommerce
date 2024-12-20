@@ -1,16 +1,21 @@
 from typing import Optional
 
-from schemas.common import DocumentUpdate, DocumentCreate
+from pydantic import BaseModel
+
+from schemas.common import UpdateModel, OutboundModel
 
 
-class Product(DocumentCreate):
+class Product(BaseModel):
     name: str
     description: str
     price: float
     category: str
     brand: str
 
-class UpdateProduct(DocumentUpdate):
+class ProductOutbound(Product, OutboundModel):
+    pass
+
+class UpdateProduct(UpdateModel):
     name: Optional[str]
     description: Optional[str]
     price: Optional[float]

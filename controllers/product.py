@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.common import APIResponse
-from schemas.product import Product, UpdateProduct
+from schemas.product import Product, UpdateProduct, ProductOutbound
 import services.product as product_service
 
 router = APIRouter()
@@ -17,19 +17,19 @@ async def register_product(product: Product):
 
 
 # Endpoint to get all products
-@router.get("/", response_model=List[Product])
+@router.get("/", response_model=List[ProductOutbound])
 async def get_products():
     return await product_service.get_all_products()
 
 
 # Endpoint to get a specific product by its ID
-@router.get("/{product_id}", response_model=Product)
+@router.get("/{product_id}", response_model=ProductOutbound)
 async def get_product_by_id(product_id: str):
     return await product_service.get_product_by_id(product_id)
 
 
 # Endpoint to update a product
-@router.patch("/", response_model=Product)
+@router.patch("/", response_model=ProductOutbound)
 async def update_product(product: UpdateProduct):
     return await product_service.update_product(product)
 
