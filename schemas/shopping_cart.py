@@ -9,7 +9,7 @@ from schemas.product import ProductOutbound
 class ShoppingCartItem(BaseModel):
     product: ProductOutbound
     quantity: int
-    total_price: float
+    total_price: float = 0.0
 
 class ShoppingCartOutbound(OutboundModel):
     user_id: Optional[MongoObjectId] = Field(default=None)
@@ -20,3 +20,7 @@ class ShoppingCartOutbound(OutboundModel):
 
 class CreateShoppingCart(BaseModel):
     user_id: Optional[PyObjectId] = Field(default=None)
+
+class AddToCart(BaseModel):
+    product_id: PyObjectId
+    quantity: int = 1

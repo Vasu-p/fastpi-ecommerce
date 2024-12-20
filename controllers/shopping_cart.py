@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from schemas.common import APIResponse
-from schemas.shopping_cart import CreateShoppingCart, ShoppingCartOutbound
+from schemas.shopping_cart import CreateShoppingCart, ShoppingCartOutbound, AddToCart
 import services.shopping_cart as shopping_cart_service
 
 router = APIRouter()
@@ -27,3 +27,8 @@ async def delete_cart(cart_id: str):
     if not deleted:
         raise HTTPException(status_code=404, detail="Shopping cart not found")
     return APIResponse(code=200, message="Shopping cart deleted successfully!").dict()
+
+@router.post("/{cart_id}/add", response_model=APIResponse)
+async def add_to_cart(cart_id: str, request: AddToCart):
+    await shopping_cart_service.add_to_cart(cart_id, request)
+    return APIResponse(code=200, message="Product added successfully!").dict()

@@ -10,7 +10,7 @@ user_repository = UserRepository()
 shopping_cart_repository = ShoppingCartRepository()
 
 async def register_user(user: CreateUser):
-    user_id = await user_repository.create(user)
+    user_id = await user_repository.create(document=user)
     if not user_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="User registration Failed!").dict())
     shopping_cart_id = await shopping_cart_repository.create(CreateShoppingCart(user_id=user_id))
@@ -40,5 +40,11 @@ async def update_user(user: UpdateUser):
 async def delete_user(id: str):
     deleted = await user_repository.delete(id)
     if not deleted:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
+    return True
+
+async def does_user_exist(id: str):
+    exists = await user_repository.check_if_exists(id)
+    if not exists:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
     return True

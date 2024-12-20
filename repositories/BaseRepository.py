@@ -13,9 +13,11 @@ class BaseRepository:
         self.collection = collection
 
     @with_db
-    async def create(self, document: BaseModel, db: AsyncIOMotorDatabase):
+    async def create(self, document: BaseModel, db: AsyncIOMotorDatabase, init_dict=None):
+        if init_dict is None:
+            init_dict = {}
         try:
-            insert_result = await db[self.collection].insert_one(document.dict(exclude_unset=True, exclude_none=True))
+            insert_result = await db[self.collection].insert_one(document.dict(exclude_unset=True, exclude_none=True) | init_dict)
             return str(insert_result.inserted_id)
         except Exception as e:
             print(e)
@@ -30,6 +32,11 @@ class BaseRepository:
     async def get_by_id(self, objectId: str, db: AsyncIOMotorDatabase):
         user = await db[self.collection].find_one({"_id": ObjectId(objectId)})
         return user
+
+    @with_db
+    async def check_if_exists(self, objectId: str, db: AsyncIOMotorDatabase):
+        document = await db[self.collection].find_one({"_id": ObjectId(objectId)}, {"_id": 1})
+        return document is not None
 
     @with_db
     async def update(self, document: UpdateModel, db: AsyncIOMotorDatabase):

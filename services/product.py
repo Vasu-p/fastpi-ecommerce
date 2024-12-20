@@ -8,7 +8,7 @@ product_repository = ProductRepository()
 
 
 async def register_product(product: CreateProduct):
-    created_id = await product_repository.create(product)
+    created_id = await product_repository.create(document=product)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Product registration Failed!").dict())
     return created_id
@@ -31,5 +31,11 @@ async def update_product(product: UpdateProduct):
 async def delete_product(id: str):
     deleted = await product_repository.delete(id)
     if not deleted:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Product not found!").dict())
+    return True
+
+async def does_product_exist(id: str):
+    exists = await product_repository.check_if_exists(id)
+    if not exists:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Product not found!").dict())
     return True
