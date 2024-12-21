@@ -80,7 +80,6 @@ async def clear_cart(id: str):
     return True
 
 def _compute_cart_amounts(cart):
-    print(f"cart is {cart}")
     product_map = {}
     for product in cart["products"]:
         product_map[product["_id"]] = product
