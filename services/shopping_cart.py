@@ -11,7 +11,9 @@ shopping_cart_repository = ShoppingCartRepository()
 async def create_shopping_cart(shopping_cart: CreateShoppingCart):
     if shopping_cart.user_id:
         await does_user_exist(str(shopping_cart.user_id))
-
+    shopping_cart_for_user = await shopping_cart_repository.get_by_user_id(shopping_cart.user_id)
+    if shopping_cart_for_user:
+        raise HTTPException(status_code=400, detail=APIResponse(code=400, message="Shopping Cart already exists for the user!").dict())
     created_id = await shopping_cart_repository.create(shopping_cart)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Shopping Cart creation Failed!").dict())
