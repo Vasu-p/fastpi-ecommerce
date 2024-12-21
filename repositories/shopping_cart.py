@@ -5,6 +5,25 @@ from config.database import with_db
 from repositories.BaseRepository import BaseRepository
 from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart
 
+cart_products_aggregate = {
+    "$lookup": {
+        "from": "products",
+        "localField": "items.product_id",
+        "foreignField": "_id",
+        "as": "products"
+    }
+}
+
+cart_id_match = lambda id: {
+    "$match": {
+        "_id": ObjectId(id)
+    }
+}
+user_id_match = lambda id: {
+    "$match": {
+        "user_id": ObjectId(id)
+    }
+}
 
 class ShoppingCartRepository(BaseRepository):
     def __init__(self):
@@ -17,18 +36,7 @@ class ShoppingCartRepository(BaseRepository):
     @with_db
     async def get_by_id(self, id: str, db: AsyncIOMotorDatabase):
         try:
-            cart = (await db[self.collection].aggregate([{
-                "$match": {
-                    "_id": ObjectId(id)
-                }
-            },{
-                "$lookup": {
-                    "from": "products",
-                    "localField": "items.product_id",
-                    "foreignField": "_id",
-                    "as": "products"
-                }}
-            ]).to_list())[0]
+            cart = (await db[self.collection].aggregate([cart_id_match(id), cart_products_aggregate]).to_list())[0]
             return cart
         except Exception as e:
             print(e)
@@ -37,7 +45,7 @@ class ShoppingCartRepository(BaseRepository):
     @with_db
     async def get_by_user_id(self, user_id: str, db: AsyncIOMotorDatabase):
         try:
-            return await db[self.collection].find_one({"user_id": ObjectId(user_id)})
+            return (await db[self.collection].aggregate([user_id_match(user_id), cart_products_aggregate]).to_list())[0]
         except:
             return None
 
