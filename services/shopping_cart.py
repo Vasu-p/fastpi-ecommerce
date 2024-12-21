@@ -65,3 +65,10 @@ async def remove_from_cart(id: str, request: RemoveFromCart):
     if not removed:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Removing from cart failed!").dict())
     return True
+
+async def clear_cart(id: str):
+    await does_cart_exist(id)
+    cleared = await shopping_cart_repository.clear_cart(id)
+    if not cleared:
+        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Clearing cart failed!").dict())
+    return True

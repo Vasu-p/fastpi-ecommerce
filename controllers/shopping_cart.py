@@ -37,3 +37,8 @@ async def add_to_cart(cart_id: str, request: AddToCart):
 async def remove_from_cart(cart_id: str, request: RemoveFromCart):
     await shopping_cart_service.remove_from_cart(cart_id, request)
     return APIResponse(code=200, message="Product removed successfully!").dict()
+
+@router.post("/{cart_id}/clear", response_model=APIResponse)
+async def clear_cart(cart_id: str):
+    await shopping_cart_service.clear_cart(cart_id)
+    return APIResponse(code=200, message="Cart cleared successfully!").dict()

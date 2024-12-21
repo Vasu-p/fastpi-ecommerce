@@ -15,7 +15,7 @@ class ShoppingCartRepository(BaseRepository):
         return await super().create(document=shopping_cart, init_dict={"items": []})
 
     @with_db
-    async def get_by_user_id(self, user_id: str, db: AsyncIOMotorDatabase, **kwargs):
+    async def get_by_user_id(self, user_id: str, db: AsyncIOMotorDatabase):
         try:
             return await db[self.collection].find_one({"user_id": ObjectId(user_id)})
         except:
@@ -34,6 +34,15 @@ class ShoppingCartRepository(BaseRepository):
     async def remove_from_cart(self, id: str, request: RemoveFromCart, db: AsyncIOMotorDatabase):
         try:
             await db[self.collection].find_one_and_update({"_id": ObjectId(id)}, { "$pull": {"items": {'product_id': request.product_id}} })
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @with_db
+    async def clear_cart(self, id: str, db: AsyncIOMotorDatabase):
+        try:
+            await db[self.collection].find_one_and_update({"_id": ObjectId(id)}, { "$pull": {"items": {} }})
             return True
         except Exception as e:
             print(e)
