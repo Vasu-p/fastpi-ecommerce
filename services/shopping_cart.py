@@ -11,7 +11,8 @@ shopping_cart_repository = ShoppingCartRepository()
 async def create_shopping_cart(shopping_cart: CreateShoppingCart):
     if shopping_cart.user_id:
         await does_user_exist(str(shopping_cart.user_id))
-    created_id = await shopping_cart_repository.create(shopping_cart, )
+
+    created_id = await shopping_cart_repository.create(shopping_cart)
     if not created_id:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Shopping Cart creation Failed!").dict())
     return created_id
@@ -30,6 +31,9 @@ async def get_shopping_cart_by_user_id(user_id: str):
     return shopping_cart
 
 async def delete_shopping_cart(id: str):
+    user_associated = await shopping_cart_repository.check_if_user_associated(id)
+    if user_associated:
+        raise HTTPException(status_code=400, detail=APIResponse(code=400, message="Cannot delete the only user cart!").dict())
     deleted = await shopping_cart_repository.delete(id)
     if not deleted:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())

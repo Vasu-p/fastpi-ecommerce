@@ -54,3 +54,10 @@ class ShoppingCartRepository(BaseRepository):
         if exists:
             return True
         return False
+
+    @with_db
+    async def check_if_user_associated(self, id: str, db: AsyncIOMotorDatabase):
+        cart = await db[self.collection].find_one({"_id": ObjectId(id)}, {"user_id": 1})
+        if cart["user_id"]:
+            return True
+        return False
