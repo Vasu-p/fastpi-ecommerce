@@ -2,7 +2,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from config.database import with_db
 from repositories.BaseRepository import BaseRepository
-from repositories.common import get_skip_limit
+from repositories.util import get_skip_limit
 from schemas.common import PaginationParams, PaginatedData
 
 PAGE_META_QUERY = [{"$count": "total_count"}]
