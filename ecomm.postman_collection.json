@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "49e7bdbc-b011-4f18-ac9e-3cc1bc7eba02",
+		"name": "ecomm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name4\",\n    \"email\": \"4@4.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page_no",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "page_size",
+							"value": "5",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/users/6765e4b7617f43ebc3cefcba",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"6765e4b7617f43ebc3cefcba"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get users shopping cart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/users/6765e4b7617f43ebc3cefcba/shopping-cart",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"6765e4b7617f43ebc3cefcba",
+						"shopping-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"6763c79adea46d2b02a39b25\",\n    \"name\": \"vasu\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/users/67653c876f74e0da7ae19fa0",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"67653c876f74e0da7ae19fa0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Apple iPhone 15\",\n  \"description\": \"The latest iPhone with advanced features and a stunning design.\",\n  \"price\": 999.99,\n  \"category\": \"Smartphones\",\n  \"brand\": \"Apple\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update product",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"67650b0aac41a7ddbc8efc06\",\n    \"name\": \"Updated Laptop\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create shopping cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/shopping-carts",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add to cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"676611465ad7eeb523070eca\",\n    \"quantity\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/shopping-carts/6765e4b7617f43ebc3cefcbb/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts",
+						"6765e4b7617f43ebc3cefcbb",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove from cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"6765e4cb617f43ebc3cefcbc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/shopping-carts/6765e4b7617f43ebc3cefcbb/remove",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts",
+						"6765e4b7617f43ebc3cefcbb",
+						"remove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clear cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"6765e4cb617f43ebc3cefcbc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/shopping-carts/6765e4b7617f43ebc3cefcbb/clear",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts",
+						"6765e4b7617f43ebc3cefcbb",
+						"clear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get shopping cart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/shopping-carts/6765e4b7617f43ebc3cefcbb",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts",
+						"6765e4b7617f43ebc3cefcbb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete shopping cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/shopping-carts/6765e4b7617f43ebc3cefcbb",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"shopping-carts",
+						"6765e4b7617f43ebc3cefcbb"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
