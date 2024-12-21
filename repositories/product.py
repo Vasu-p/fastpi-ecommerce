@@ -10,22 +10,21 @@ def FILTER_AGGREGATION(filter_params: ProductFilterParams):
     match_dict = {}
     if filter_params.search:
         match_dict["$text"] = { "$search": filter_params.search }
-    if filter_params.min_price:
-        if "$and" not in match_dict:
-            match_dict["$and"] = []
-        match_dict["$and"].append({ "price": { "$gt": filter_params.min_price } })
-    if filter_params.max_price:
-        if "$and" not in match_dict:
-            match_dict["$and"] = []
-        match_dict["$and"].append({ "price": { "$lt": filter_params.max_price } })
-    if filter_params.category:
-        match_dict["category"] = filter_params.category
-    if filter_params.brand:
-        match_dict["brand"] = filter_params.brand
 
-    return {
-        "$match": match_dict
-    }
+    if any([filter_params.min_price, filter_params.max_price, filter_params.category, filter_params.brand]):
+        match_dict["$and"] = []
+
+        if filter_params.min_price:
+            match_dict["$and"].append({ "price": { "$gt": filter_params.min_price } })
+        if filter_params.max_price:
+            match_dict["$and"].append({ "price": { "$lt": filter_params.max_price } })
+
+        if filter_params.category:
+            match_dict["$and"].append({ "category": filter_params.category })
+        if filter_params.brand:
+            match_dict["$and"].append({ "brand": filter_params.brand })
+
+    return { "$match": match_dict }
 
 class ProductRepository(BaseRepository):
     def __init__(self):
