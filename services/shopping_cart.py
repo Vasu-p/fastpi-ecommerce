@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from repositories.shopping_cart import ShoppingCartRepository
 from schemas.common import APIResponse
-from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart
+from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart, ShoppingCartOutbound
 from services.user import does_user_exist
 from services.product import does_product_exist
 
@@ -23,14 +23,14 @@ async def get_shopping_cart_by_id(id: str):
     shopping_cart = await shopping_cart_repository.get_by_id(id)
     if not shopping_cart:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())
-    return shopping_cart
+    return _compute_cart_amounts(shopping_cart)
 
 async def get_shopping_cart_by_user_id(user_id: str):
     await does_user_exist(user_id)
     shopping_cart = await shopping_cart_repository.get_by_user_id(user_id)
     if not shopping_cart:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())
-    return shopping_cart
+    return _compute_cart_amounts(shopping_cart)
 
 async def delete_shopping_cart(id: str):
     user_associated = await shopping_cart_repository.check_if_user_associated(id)
@@ -78,3 +78,15 @@ async def clear_cart(id: str):
     if not cleared:
         raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Clearing cart failed!").dict())
     return True
+
+def _compute_cart_amounts(cart):
+    print(f"cart is {cart}")
+    product_map = {}
+    for product in cart["products"]:
+        product_map[product["_id"]] = product
+    cart_total = 0.0
+    for item in cart["items"]:
+        item["total_price"] = item["quantity"] * product_map[item["product_id"]]["price"]
+        cart_total += item["total_price"]
+    cart["total_price"] = cart_total
+    return cart
