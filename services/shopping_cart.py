@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from repositories.shopping_cart import ShoppingCartRepository
 from schemas.common import APIResponse
-from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart, ShoppingCartOutbound
+from schemas.shopping_cart import CreateShoppingCart, AddToCart, RemoveFromCart
 from services.user import does_user_exist
 from services.product import does_product_exist
 
