@@ -15,6 +15,26 @@ class ShoppingCartRepository(BaseRepository):
         return await super().create(document=shopping_cart, init_dict={"items": []})
 
     @with_db
+    async def get_by_id(self, id: str, db: AsyncIOMotorDatabase):
+        try:
+            cart = (await db[self.collection].aggregate([{
+                "$match": {
+                    "_id": ObjectId(id)
+                }
+            },{
+                "$lookup": {
+                    "from": "products",
+                    "localField": "items.product_id",
+                    "foreignField": "_id",
+                    "as": "products"
+                }}
+            ]).to_list())[0]
+            return cart
+        except Exception as e:
+            print(e)
+            return None
+
+    @with_db
     async def get_by_user_id(self, user_id: str, db: AsyncIOMotorDatabase):
         try:
             return await db[self.collection].find_one({"user_id": ObjectId(user_id)})
