@@ -8,3 +8,12 @@ def get_skip_limit(page_params: PaginationParams):
     skip = page_params.page_no * page_params.page_size
     limit = page_params.page_size
     return {skip, limit}
+
+def PAGINATION_AGGREGATION(page_params: PaginationParams):
+    (skip, limit) = get_skip_limit(page_params)
+    return {
+        "$facet": {
+            "page_meta": [{"$count": "total_count"}],
+            "data": [{"$skip": skip}, {"$limit": limit}]
+        }
+    }
