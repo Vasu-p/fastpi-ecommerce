@@ -1,7 +1,6 @@
 from typing import Optional
 
 from pydantic import EmailStr, BaseModel
-from pyobjectID import MongoObjectId
 
 from schemas.common import UpdateModel, OutboundModel
 
