@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from repositories.shopping_cart import ShoppingCartRepository
 from repositories.user import UserRepository
-from schemas.common import APIResponse
+from schemas.common import APIResponse, PaginationParams
 from schemas.user import CreateUser, UpdateUser, UserRegistrationResponse, UserOutbound
 from schemas.shopping_cart import CreateShoppingCart
 
@@ -48,3 +48,9 @@ async def does_user_exist(id: str):
     if not exists:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="User not found!").dict())
     return True
+
+async def get_users_paginated(page_params: PaginationParams):
+    users = await user_repository.get_paginated(page_params)
+    if not users:
+        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Error loading user data!").dict())
+    return users

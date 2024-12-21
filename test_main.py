@@ -23,13 +23,13 @@ def test_create_user():
     global user_id
     user_id = response.json()["detail"]["_id"]
 
-def test_user_get_all():
+def test_user_get_paginated():
     response = requests.get(get_url('/users'))
     assert response.status_code == 200
-    data = response.json()
-    assert len(data) == 1
-    assert data[0]["name"] == "user"
-    assert data[0]["email"] == "em@em.com"
+    response = response.json()
+    assert response["total_count"] == 1
+    assert response["data"][0]["name"] == "user"
+    assert response["data"][0]["email"] == "em@em.com"
 
 def test_get_user_by_id():
     response = requests.get(get_url(f'/users/{user_id}'))

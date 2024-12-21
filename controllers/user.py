@@ -1,10 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 import services.user as user_service
 import services.shopping_cart as shopping_cart_service
-from schemas.common import APIResponse
+from schemas.common import APIResponse, PaginationParams, PaginatedData
 from schemas.shopping_cart import ShoppingCartOutbound
 from schemas.user import UpdateUser, UserOutbound, CreateUser, UserRegistrationResponse
 
@@ -17,9 +17,13 @@ async def register_user(user: CreateUser):
     return APIResponse(code=200, message="User registered successful!",
                        detail={"_id": user_registration.user_id, "shopping_cart_id": user_registration.shopping_cart_id}).dict()
 
-@router.get("/", response_model=List[UserOutbound])
+@router.get("/all", response_model=List[UserOutbound])
 async def get_users():
     return await user_service.get_all_users()
+
+@router.get("/", response_model=PaginatedData[UserOutbound])
+async def get_users_paginated(page_params: PaginationParams = Depends()):
+    return await user_service.get_users_paginated(page_params)
 
 @router.get("/{user_id}", response_model=UserOutbound)
 async def get_user_by_id(user_id: str):
