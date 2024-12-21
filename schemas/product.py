@@ -24,3 +24,10 @@ class UpdateProduct(UpdateModel):
     price: Optional[float] = None
     category: Optional[str] = None
     brand: Optional[str] = None
+
+class ProductFilterParams(BaseModel):
+    search: Optional[str] = None
+    min_price: Optional[float] = None
+    max_price: Optional[float] = None
+    category: Optional[str] = None
+    brand: Optional[str] = None

@@ -1,4 +1,5 @@
-from schemas.common import PaginationParams
+from schemas.common import PaginationParams, SortParams
+
 
 def remove_id(dict: dict):
     dict.pop("id", None)
@@ -17,3 +18,11 @@ def PAGINATION_AGGREGATION(page_params: PaginationParams):
             "data": [{"$skip": skip}, {"$limit": limit}]
         }
     }
+
+def SORT_AGGREGATION(sort_params: SortParams):
+    sort = {
+        "$sort": {
+            sort_params.sort_by: sort_params.sort_dir.get_mongodb_dir()
+        }
+    }
+    return sort

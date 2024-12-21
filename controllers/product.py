@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from schemas.common import APIResponse
-from schemas.product import CreateProduct, UpdateProduct, ProductOutbound
+from schemas.common import APIResponse, PaginatedData, PaginationParams, SortParams
+from schemas.product import CreateProduct, UpdateProduct, ProductOutbound, ProductFilterParams
 import services.product as product_service
 
 router = APIRouter()
@@ -17,10 +17,15 @@ async def register_product(product: CreateProduct):
 
 
 # Endpoint to get all products
-@router.get("/", response_model=List[ProductOutbound])
+@router.get("/all", response_model=List[ProductOutbound])
 async def get_products():
     return await product_service.get_all_products()
 
+@router.get("/", response_model=PaginatedData[ProductOutbound])
+async def get_paginated_products(page_params: PaginationParams = Depends(),
+                                 sort_params: SortParams = Depends(), filter_params: ProductFilterParams = Depends()):
+    return await product_service.get_products_paginated(page_params=page_params,
+                                                        sort_params=sort_params, filter_params=filter_params)
 
 # Endpoint to get a specific product by its ID
 @router.get("/{product_id}", response_model=ProductOutbound)

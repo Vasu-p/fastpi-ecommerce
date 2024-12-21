@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 
 from repositories.product import ProductRepository
-from schemas.common import APIResponse
-from schemas.product import CreateProduct, UpdateProduct
+from schemas.common import APIResponse, PaginationParams, SortParams
+from schemas.product import CreateProduct, UpdateProduct, ProductFilterParams
 
 product_repository = ProductRepository()
 
@@ -39,3 +39,10 @@ async def does_product_exist(id: str):
     if not exists:
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Product not found!").dict())
     return True
+
+async def get_products_paginated(page_params: PaginationParams,
+                                 filter_params: ProductFilterParams, sort_params: SortParams):
+    products = await product_repository.get_paginated(page_params=page_params, sort_params=sort_params, filter_params=filter_params)
+    if not products:
+        raise HTTPException(status_code=500, detail=APIResponse(code=500, message="Error loading products data!").dict())
+    return products

@@ -1,6 +1,8 @@
+from enum import Enum
 from typing import Optional, Any, List, TypeVar, Generic
 
 from pydantic import BaseModel, Field
+from pygments.lexers import asc
 from pyobjectID import PyObjectId, MongoObjectId
 
 
@@ -26,3 +28,13 @@ class PaginatedData(BaseModel, Generic[T]):
     total_count: int
     page_no: int
     page_size: int
+
+class SortDirEnum(str, Enum):
+    ASC = "asc"
+    DESC = "desc"
+    def get_mongodb_dir(self):
+        return 1 if self == SortDirEnum.ASC else -1
+
+class SortParams(BaseModel):
+    sort_by: str = "_id"
+    sort_dir: SortDirEnum = SortDirEnum.ASC
