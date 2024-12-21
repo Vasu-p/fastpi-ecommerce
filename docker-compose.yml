@@ -1,12 +1,14 @@
 version: "3"
 
 services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017
+
   mongodb:
     image: bitnami/mongodb:latest
     ports:
       - "27017:27017"
-    volumes:
-      - data:/bitnami/mongodb
-
-volumes:
-  data:
