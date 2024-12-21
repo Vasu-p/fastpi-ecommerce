@@ -8,10 +8,10 @@ def remove_id(dict: dict):
 def get_skip_limit(page_params: PaginationParams):
     skip = page_params.page_no * page_params.page_size
     limit = page_params.page_size
-    return {skip, limit}
+    return { "skip": skip, "limit": limit }
 
 def PAGINATION_AGGREGATION(page_params: PaginationParams):
-    (skip, limit) = get_skip_limit(page_params)
+    (skip, limit) = get_skip_limit(page_params).values()
     return {
         "$facet": {
             "page_meta": [{"$count": "total_count"}],
