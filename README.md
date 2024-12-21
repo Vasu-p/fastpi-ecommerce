@@ -72,3 +72,44 @@ way to abstract that out and reuse similar to how we do with `BaseRepository` bu
 - I have used `print`s throughout the code in lieu of logging. That is for some reason during local development 
 logs were not getting printed if I use `logging` library.
 - No formatter was used during the development of the project. So please excuse the format as well as imports.
+
+# Scalability
+
+In order to scale the app for large number of users there are primarily 2 points which we would have to tackle:
+
+1. Making sure that Application doesn't get bottlenecked
+2. Making sure that DB doesn't get bottlenecked
+
+In order to make sure that our app can scale with increasing demand, we would have to deploy multiple instances of the app such
+that the all the requests coming in are distributed among the instances. Depending on how its deployed it can either be handled
+by the hyperscaler automatically or we might need some kind of LB -> Instances setup.
+
+In order to make sure that the DB is able to handle the load put by scaled out application instances, we can run MongoDB 
+in either replicated mode where we replicate the DB and make multiple copies effectively distributing the read across multiple 
+replicas. If even after that performance is not desired, then we might have to run a cluster of MongoDB nodes operating such that
+the collections are sharded across the nodes. This way the writes are also distributed across nodes increasing the write
+throughput. When deciding how to shard the DB, we need to look at the use-cases and optimize for the following:
+
+1. Avoid cross node transactions.
+2. Avoid joining data across nodes.
+
+Following are the cross entity operations our app has we need to look at:
+
+1. When creating user, we need to create a shopping cart of the user.
+   1. If user and shopping_cart for it are on different nodes then it will become difficult to enforce 
+       atomicity of this operation. 
+2. When fetching shopping cart, we need to fetch the associated products.
+   1. If the products in the cart are spread across nodes, we might have a fan out query to 
+         fetch all products for the given cart.
+
+Based on the above two observations, combined with the fact that product updates and inserts are not that frequent and 
+there are way more products than users (and hence carts as they are 1:1), we can choose following design:
+
+- `users` are sharded based on `_id` field. The shopping carts are also sharded based on the `user_id` field. This way
+for every user their shopping cart is on the same node. This mitigates the issue no 1. since we can enforce transactions 
+on the same DB node.
+  - For shopping carts without `user_id` this would mean they are mapped to a single node. Assuming there aren't many of them,
+    and they regularly get cleared, this should not be a problem.
+- `products` are sharded based on `_id` of the products. This means that for getting product information for a cart, we might have
+to query `n` nodes. But since products are not updated very often and it follows some sort of 80:20 distribution where 20% of the most famous products
+are present in a lot of carts and 80% in none, we can easily cache these 20% products and mitigate this drawback.
