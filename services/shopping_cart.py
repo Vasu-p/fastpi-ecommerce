@@ -22,6 +22,13 @@ async def get_shopping_cart_by_id(id: str):
         raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())
     return shopping_cart
 
+async def get_shopping_cart_by_user_id(user_id: str):
+    await does_user_exist(user_id)
+    shopping_cart = await shopping_cart_repository.get_by_user_id(user_id)
+    if not shopping_cart:
+        raise HTTPException(status_code=404, detail=APIResponse(code=404, message="Shopping Cart not found!").dict())
+    return shopping_cart
+
 async def delete_shopping_cart(id: str):
     deleted = await shopping_cart_repository.delete(id)
     if not deleted:

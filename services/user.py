@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from repositories.shopping_cart import ShoppingCartRepository
 from repositories.user import UserRepository
 from schemas.common import APIResponse
-from schemas.user import CreateUser, UpdateUser, UserRegistrationResponse
+from schemas.user import CreateUser, UpdateUser, UserRegistrationResponse, UserOutbound
 from schemas.shopping_cart import CreateShoppingCart
 
 user_repository = UserRepository()

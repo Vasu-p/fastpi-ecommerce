@@ -15,6 +15,13 @@ class ShoppingCartRepository(BaseRepository):
         return await super().create(document=shopping_cart, init_dict={"items": []})
 
     @with_db
+    async def get_by_user_id(self, user_id: str, db: AsyncIOMotorDatabase, **kwargs):
+        try:
+            return await db[self.collection].find_one({"user_id": ObjectId(user_id)})
+        except:
+            return None
+
+    @with_db
     async def add_to_cart(self, id: str, request: AddToCart, db: AsyncIOMotorDatabase):
         try:
             await db[self.collection].find_one_and_update({"_id": ObjectId(id)}, { "$push": {"items": request.dict()} })

@@ -2,9 +2,11 @@ from typing import List
 
 from fastapi import APIRouter
 
-from schemas.common import APIResponse
-from schemas.user import UpdateUser, UserOutbound, CreateUser, UserRegistrationResponse
 import services.user as user_service
+import services.shopping_cart as shopping_cart_service
+from schemas.common import APIResponse
+from schemas.shopping_cart import ShoppingCartOutbound
+from schemas.user import UpdateUser, UserOutbound, CreateUser, UserRegistrationResponse
 
 router = APIRouter()
 
@@ -31,3 +33,7 @@ async def update_user(user: UpdateUser):
 async def delete_user(user_id: str):
     await user_service.delete_user(user_id)
     return APIResponse(code=200, message="User deleted successful!").dict()
+
+@router.get("/{user_id}/shopping-cart", response_model=ShoppingCartOutbound)
+async def get_shopping_cart_for_user(user_id: str):
+    return await shopping_cart_service.get_shopping_cart_by_user_id(user_id)
