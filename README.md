@@ -69,7 +69,6 @@ the cart).
 of the code.
 - The services at this moment do contain some basic CRUD methods which are very similar across entities. There should be a
 way to abstract that out and reuse similar to how we do with `BaseRepository` but I did not dived deep into it.
-- 
 - I have used `print`s throughout the code in lieu of logging. That is for some reason during local development 
 logs were not getting printed if I use `logging` library.
 - No formatter was used during the development of the project. So please excuse the format as well as imports.
